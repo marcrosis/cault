@@ -15,6 +15,7 @@ Vault is configured to use a `consul` [secret backend](https://www.vaultproject.
   - [Watch Consul logs](#watch-consul-logs)
   - [Writing / Reading Secrets](#writing--reading-secrets)
   - [Response Wrapping](#response-wrapping)
+    - [MySQL Backend](#mysql-backend)
     - [System Backend](#system-backend)
     - [Cubbyhole Backend](#cubbyhole-backend)
 - [Troubleshooting](#troubleshooting)
@@ -181,6 +182,28 @@ And it is in fact in Consul:
 > _NOTE: for these examples to work you would need [jq](https://stedolan.github.io/jq/) (i.e. to parse JSON responses from Vault)._
 
 > _`brew install jq` or `apt-get install jq` or similar_
+
+#### MySQL Backend
+
+There's a setup script included to setup this and enable a MySQL backend, you
+can run it with:
+
+```
+docker-compose exec vault sh /setup_vault.sh
+```
+
+and to test that it worked:
+
+```
+docker-compose exec vault vault read mysql/creds/readonly
+```
+
+the returned cretentials should be present in mysql:
+
+```
+docker-compose exec mysqldb mysql -uroot -prootpw -e 'select Host, User from mysql.user;'
+```
+
 
 #### System backend
 
